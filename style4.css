@@ -1,0 +1,9 @@
+body {
+    background-color: #f8f9fa;
+}
+.list-group-item {
+    font-weight: bold;
+}
+.high { background-color: #dc3545; color: white; } /* High priority */
+.medium { background-color: #ffc107; color: black; } /* Medium priority */
+.low { background-color: #28a745; color: white; } /* Low priority */
