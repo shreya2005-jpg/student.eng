@@ -1,13 +1,15 @@
-table {
-    cursor: pointer;
+body {
+    background-image: url("background.jpg"); /* Add an attractive background image */
+    background-size: cover;
+    font-family: Arial, sans-serif;
 }
 
-th {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+.container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
 }
 
-th:hover {
-    background-color: #0056b3;
+button {
+    cursor: pointer;
 }
