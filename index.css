@@ -1,0 +1,13 @@
+table {
+    cursor: pointer;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+th:hover {
+    background-color: #0056b3;
+}
