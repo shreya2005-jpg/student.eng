@@ -1,42 +1,55 @@
 $(document).ready(function() {
-    // Add registration data to table
-    $("#registrationForm").submit(function(event) {
-        event.preventDefault();
-        
-        let name = $("#name").val();
-        let email = $("#email").val();
-        let role = $("#role").val();
-        
-        let newRow = `<tr>
-            <td>${name}</td>
-            <td>${email}</td>
-            <td>${role}</td>
-        </tr>`;
-        
-        $("#userTable").append(newRow);
-        $("#registrationForm")[0].reset();
+    loadTasks(); // Load stored tasks on page load
+
+    $("#addTaskBtn").click(function() {
+        let taskText = $("#taskInput").val().trim();
+        if (taskText !== "") {
+            addTask(taskText);
+            $("#taskInput").val("");
+        }
     });
 
-    // Implement search filter
-    $("#searchInput").on("keyup", function() {
-        let value = $(this).val().toLowerCase();
-        $("#userTable tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    // Add task
+    function addTask(taskText) {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.push(taskText);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTasks();
+    }
+
+    // Load tasks from localStorage
+    function loadTasks() {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        $("#taskList").html(""); // Clear list
+        tasks.forEach((task, index) => {
+            $("#taskList").append(`
+                <tr>
+                    <td><input type="text" class="form-control task-edit" value="${task}" data-index="${index}"></td>
+                    <td>
+                        <button class="btn btn-warning editBtn" data-index="${index}">Edit</button>
+                        <button class="btn btn-danger deleteBtn" data-index="${index}">Delete</button>
+                    </td>
+                </tr>
+            `);
         });
+    }
+
+    // Edit task
+    $(document).on("click", ".editBtn", function() {
+        let index = $(this).data("index");
+        let updatedTask = $(`.task-edit[data-index="${index}"]`).val();
+        let tasks = JSON.parse(localStorage.getItem("tasks"));
+        tasks[index] = updatedTask;
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTasks();
+    });
+
+    // Delete task
+    $(document).on("click", ".deleteBtn", function() {
+        let index = $(this).data("index");
+        let tasks = JSON.parse(localStorage.getItem("tasks"));
+        tasks.splice(index, 1);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTasks();
     });
 });
-
-// Sorting function
-function sortTable(columnIndex) {
-    let rows = $("#userTable tr").get();
-    rows.sort(function(a, b) {
-        let A = $(a).children("td").eq(columnIndex).text().toUpperCase();
-        let B = $(b).children("td").eq(columnIndex).text().toUpperCase();
-        
-        return A < B ? -1 : A > B ? 1 : 0;
-    });
-
-    $.each(rows, function(index, row) {
-        $("#userTable").append(row);
-    });
-}
